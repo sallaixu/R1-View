@@ -3,10 +3,12 @@ const { param2Obj } = require('./utils')
 
 const user = require('./user')
 const table = require('./table')
+// const sysInfo = require('./sysInfo')
 
 const mocks = [
   ...user,
-  ...table
+  ...table,
+  // ...sysInfo
 ]
 
 // for front mock
@@ -48,6 +50,9 @@ function mockXHR() {
   for (const i of mocks) {
     Mock.mock(new RegExp(i.url), i.type || 'get', XHR2ExpressReqWrap(i.response))
   }
+
+  //单独设置简易的mock
+  
 }
 
 module.exports = {
