@@ -7340,6 +7340,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+lyric-parser@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/lyric-parser/-/lyric-parser-1.0.1.tgz"
+  integrity sha512-klGkA3gsKMyHENefKj1OnbscWRAxvxNsYNuxgmSIQg6KqVx/HnTrfcD/gNP74XBcu7HSh+kGhCjetPlH91OtFA==
+
 make-dir@^2.0.0, make-dir@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/make-dir/-/make-dir-2.1.0.tgz"

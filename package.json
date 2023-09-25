@@ -19,6 +19,7 @@
     "echarts": "^5.4.3",
     "element-ui": "2.15.14",
     "js-cookie": "2.2.0",
+    "lyric-parser": "^1.0.1",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
