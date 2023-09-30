@@ -1,6 +1,11 @@
 <!-- <template>
   <div class="lyrics-container">
-    <div class="lyric-line" v-for="(line, index) in lyricLines" :key="index" :class="{ active: index === currentLine }">
+    <div
+      class="lyric-line"
+      v-for="(line, index) in lyricLines"
+      :key="index"
+      :class="{ active: index === currentLine }"
+    >
       {{ line.txt }}
     </div>
   </div>
@@ -23,7 +28,10 @@ export default {
     },
     handleLyric({ lineNum }) {
       this.currentLine = lineNum;
-      this.lyricLines = this.lyric.lines.slice(Math.max(lineNum - 5, 0), lineNum + 6);
+      this.lyricLines = this.lyric.lines.slice(
+        Math.max(lineNum - 5, 0),
+        lineNum + 6
+      );
     },
     handleMusicTimeUpdate(currentTime) {
       // 更新当前播放时间
@@ -112,4 +120,3 @@ export default {
   color: rgb(4, 4, 130);
 }
 </style>
-

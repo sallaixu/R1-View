@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from "@/layout";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -32,116 +32,119 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    path: "/login",
+    component: () => import("@/views/login/index"),
+    hidden: true,
   },
 
   {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
+    path: "/404",
+    component: () => import("@/views/404"),
+    hidden: true,
   },
 
   {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '系统概览', icon: 'el-icon-monitor' }
-    }]
-  },
-
-  {
-    path: '/media',
-    component: Layout,
-    redirect: '/meida/media',
-    name: '媒体信息',
+    redirect: "/dashboard",
     children: [
       {
-        path: 'media',
-        name: 'media',
-        component: () => import('@/views/media/media'),
-        meta: { title: '媒体信息', icon: 'el-icon-service' }
-      }
-    ]
+        path: "dashboard",
+        name: "Dashboard",
+        component: () => import("@/views/dashboard/index"),
+        meta: { title: "系统概览", icon: "el-icon-monitor" },
+      },
+    ],
   },
 
   {
-    path: '/form',
+    path: "/media",
     component: Layout,
-    meta: {title:'AI设置',icon:'el-icon-microphone'},
+    redirect: "/meida/media",
+    name: "媒体信息",
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'AI设置', icon: 'el-icon-microphone' }
-      }
-    ]
+        path: "media",
+        name: "media",
+        component: () => import("@/views/media/media"),
+        meta: { title: "媒体信息", icon: "el-icon-service" },
+      },
+    ],
   },
 
   {
-    path: '/nested',
+    path: "/form",
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
+    meta: { title: "AI设置", icon: "el-icon-microphone" },
+    children: [
+      {
+        path: "index",
+        name: "Form",
+        component: () => import("@/views/form/index"),
+        meta: { title: "AI设置", icon: "el-icon-microphone" },
+      },
+    ],
+  },
+
+  {
+    path: "/sys",
+    component: Layout,
+    redirect: "/nested/menu1",
+    name: "Nested",
     meta: {
-      title: '系统设置',
-      icon: 'el-icon-setting'
+      title: "系统设置",
+      icon: "el-icon-setting",
     },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: '功能开关' },
+        path: "menu1",
+        component: () => import("@/views/nested/menu1/index"), // Parent router-view
+        name: "Menu1",
+        meta: { title: "功能开关" },
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: '闹钟管理' }
+        path: "menu2",
+        component: () => import("@/views/nested/menu2/index"),
+        name: "Menu2",
+        meta: { title: "闹钟管理" },
       },
       {
-        path: 'menu3',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: '报时配置' }
+        path: "menu3",
+        component: () => import("@/views/nested/menu2/index"),
+        name: "Menu2",
+        meta: { title: "报时配置" },
       },
       {
-        path: 'menu4',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: '音量控制' }
+        path: "volume",
+        component: () => import("@/views/sys/volume/index"),
+        name: "volume",
+        meta: { title: "音量控制" },
       },
       {
-        path: 'menu5',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: '定时休眠' }
-      }
-    ]
+        path: "menu5",
+        component: () => import("@/views/nested/menu2/index"),
+        name: "Menu2",
+        meta: { title: "定时休眠" },
+      },
+    ],
   },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+  { path: "*", redirect: "/404", hidden: true },
+];
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes,
+  });
 
-const router = createRouter()
+const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;
