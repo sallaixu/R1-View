@@ -1,19 +1,21 @@
 <template>
   <div class="dashboard-container">
+    <el-row style="width: fit-content;padding: 10px;">
+      <el-select placeholder="切换音乐源" @change="musicSourceChange(musicSourceType)" v-model="musicSourceType">
+        <el-option v-for="item in musicSourceOptions" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+    </el-row>
     <el-row class="flex-center margin-top-20px">
       <el-col :xs="10" :sm="8" :md="6" :lg="4" :xl="4" class="flex-center">
-        <img
-          class="img-header"
-          src="https://p2.music.126.net/6TNYBV2rezZLiwsGYBgmPw==/123145302311773.jpg?param=130y130"
-        />
+        <img class="img-header" :src="currentSong.imgUrl || require('@/assets/default.jpg')" />
       </el-col>
     </el-row>
     <el-row class="flex-center margin-top-20px">
       <el-col :xs="10" :sm="8" :md="6" :lg="4" :xl="4" class="flex-center">
         <div class="musicInfo">
-          <label>歌手:周杰伦</label>
-          <br />
-          <label>歌曲:青花瓷</label>
+          <label>{{ currentSong.artist }}</label>
+          <label>{{ currentSong.title }} </label>
         </div>
       </el-col>
     </el-row>
@@ -30,84 +32,27 @@
     <!-- 播放控制 -->
     <el-row class="flex-center">
       <el-col :xs="20" :sm="18" :md="12" :lg="12" :xl="12" class="flex-center">
-        <el-button
-          class="music_operator"
-          type="primary"
-          icon="el-icon-arrow-left"
-          circle
-        ></el-button>
-        <el-button
-          class="music_operator"
-          style="height: 70px; width: 70px; font-size: 40px"
-          type="primary"
-          size="medium"
-          icon="el-icon-video-play
-"
-          circle
-        ></el-button>
-        <el-button
-          class="music_operator"
-          type="primary"
-          icon="el-icon-arrow-right"
-          circle
-        ></el-button>
+        <el-button @click="playPre" class="music_operator" type="primary" icon="el-icon-arrow-left" circle></el-button>
+        <el-button @click="playPause" class="music_operator" style="height: 70px; width: 70px; font-size: 40px"
+          type="primary" size="medium" icon="el-icon-video-play" circle></el-button>
+        <el-button @click="playNext" class="music_operator" type="primary" icon="el-icon-arrow-right" circle></el-button>
       </el-col>
       <el-col style="width: 30px">
-        <el-button
-          @click="showDialog"
-          style="margin-left: -20px"
-          type="warning"
-          icon="el-icon-s-unfold"
-          circle
-        ></el-button>
+        <el-button @click="showDialog" style="margin-left: -20px" type="warning" icon="el-icon-s-unfold"
+          circle></el-button>
       </el-col>
     </el-row>
-    <el-dialog
-      :visible="dialogVisible"
-      :center="true"
-      :modal="false"
-      :close-on-click-modal="false"
-      width="90%"
-      modal="true"
-      title="播放列表"
-      center="true"
-      @close="closeDialog"
-    >
+    <el-dialog :visible="dialogVisible" :center="true" :modal="false" :close-on-click-modal="false" width="90%"
+      modal="true" title="播放列表" center="true" @close="closeDialog">
       <el-row style="display: flex; justify-content: center; height: 350px">
-        <el-col
-          style="display: flex; justify-content: center; flex-direction: column"
-        >
-          <el-table
-            :data="songList"
-            style="width: 100%; overflow: auto"
-            empty-text=" "
-            stripe="true"
-          >
-            <el-table-column
-              type="index"
-              label="序号"
-              min-width="20%"
-            ></el-table-column>
-            <el-table-column
-              prop="artist"
-              label="歌手"
-              min-width="25%"
-            ></el-table-column>
-            <el-table-column
-              prop="title"
-              label="歌曲名称"
-              min-width="35%"
-            ></el-table-column>
-            <el-table-column
-              prop="duration"
-              label="时长"
-              min-width="20%"
-            ></el-table-column>
+        <el-col style="display: flex; justify-content: center; flex-direction: column">
+          <el-table :data="songList" style="width: 100%; overflow: auto" empty-text=" " stripe="true">
+            <el-table-column type="index" label="序号" min-width="20%"></el-table-column>
+            <el-table-column prop="artist" label="歌手" min-width="25%"></el-table-column>
+            <el-table-column prop="title" label="歌曲名称" min-width="35%"></el-table-column>
+            <el-table-column prop="duration" label="时长" min-width="20%"></el-table-column>
           </el-table>
-          <el-empty
-            v-if="songList.length === 0"
-            description="快去点歌吧~"
-          ></el-empty>
+          <el-empty v-if="songList.length === 0" description="快去点歌吧~"></el-empty>
         </el-col>
       </el-row>
     </el-dialog>
@@ -121,17 +66,11 @@ import {
   musicController as musicRequest,
   musicSourceRequest,
 } from "@/api/sysInfo";
-// import GlobalLoading from '../../components/loading/loading-1.vue'
+import { Row } from "element-ui";
 export default {
-  // components:[
-  // GlobalLoading
-  // ],
   data() {
     return {
       currentSong: {
-        title: "Title",
-        artist: "Artist",
-        cover: "Cover.jpg",
       },
       playlist: [
         { title: "Song 1", artist: "Artist 1", cover: "Cover 1.jpg" },
@@ -143,6 +82,19 @@ export default {
       music_process: 45,
       dialogVisible: false,
       songList: [],
+      musicSourceOptions: [{
+        value: 'NET_EASY',
+        label: '网易云音乐'
+      }, {
+        value: 'BABY_MUSIC',
+        label: '下歌宝音乐'
+      }, {
+        value: 'SLIDER_KZ',
+        label: 'SLIDER_KZ'
+      }],
+      musicSourceType: '',
+      isPlaying: false,
+      currPosition: 0
     };
   },
   methods: {
@@ -158,38 +110,18 @@ export default {
       this.dialogVisible = false;
     },
     playPause() {
-      if (this.currentSong) {
-        if (this.currentSong.isPlaying) {
-          this.currentSong.pause();
-        } else {
-          this.currentSong.play();
-        }
-      }
-    },
-    prevSong() {
-      if (this.currentSong && this.playlist.length > 0) {
-        this.currentSong = this.playlist[0]; // Set the current song as the first song in the playlist
-        this.currentSong.play(); // Play the current song
-      }
-    },
-    nextSong() {
-      if (this.currentSong && this.playlist.length > 0) {
-        let index = this.playlist.indexOf(this.currentSong); // Get the current song's index in the playlist
-        if (index < this.playlist.length - 1) {
-          // If there's a next song in the playlist...
-          this.currentSong = this.playlist[index + 1]; // Set the current song as the next song in the playlist
-          this.currentSong.play(); // Play the current song
-        } else {
-          // If there's no next song in the playlist...
-          this.$message({
-            message: "No next song in the playlist.",
-            type: "info",
-          }); // Display a message informing there's no next song in the playlist
-        }
+      if (this.isPlaying) {
+        musicRequest("PAUSE");
       } else {
-        // If there's no current song...
-        this.$message({ message: "No current song.", type: "info" }); // Display a message informing there's no current song
+        musicRequest("RESUME");
       }
+      this.isPlaying = !this.isPlaying
+    },
+    playNext() {
+      musicRequest("PLAY_NEXT");
+    },
+    playPre() {
+      musicRequest("PLAY_PRE");
     },
     getMusicList(call) {
       getMusicItems().then((response) => {
@@ -198,22 +130,44 @@ export default {
         call();
       });
     },
+    musicSourceChange(type) {
+      musicSourceRequest(type).then(response => {
+        log.info(response);
+      })
+    },
   },
   mounted() {
-    let lrc =
-      "[00:00.000] 作词 : 竹君\n[00:01.000] 作曲 : 暗杠\n[00:03.250]编曲：暗杠\n[00:05.890]器乐演奏：暗杠\n[00:08.760]和声编配：暗杠\n[00:12.620]录音混音：暗杠\n[00:14.87]听说白雪公主在逃跑\n[00:18.87]小红帽在担心大灰狼\n[00:21.55]听说疯帽喜欢爱丽丝\n[00:25.00]丑小鸭会变成白天鹅";
-    this.$refs.lyricView.setLyric(lrc);
-    let sec = 0;
+    musicRequest("CURRENT_ITEM").then((res) => {
+      console.log(res);
+      this.currentSong = res.data;
+    });
+    var that = this;
     setInterval(() => {
-      this.$refs.lyricView.handleMusicTimeUpdate(sec);
-      sec = sec + 1;
-      console.log(sec);
-    }, 1000);
+      // that.$refs.lyricView.handleMusicTimeUpdate(this.currPosition);
+      // this.currPosition = (this.currPosition + 1);
+      musicRequest("CURRENT_ITEM").then((res) => {
+        // console.log(res);
+        this.currentSong = res.data;
+      });
+      // musicRequest("POSITION").then((res)=>{
+      //     console.log(res);
+      // });
+    }, 5000);
     getMusicItems().then((response) => {
       // this.sysInfo = response.data
       this.songList = response.data;
     });
   },
+  watch: {
+    currentSong(newValue, oldValue) {
+      if (newValue.id === oldValue.id) {
+      } else {
+        this.$refs.lyricView.setLyric(newValue.mLyric);
+        // this.currPosition = 0;
+      }
+    },
+
+  }
 };
 </script>
 

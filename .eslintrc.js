@@ -193,6 +193,8 @@ module.exports = {
     'object-curly-spacing': [2, 'always', {
       objectsInObjects: false
     }],
-    'array-bracket-spacing': [2, 'never']
+    'array-bracket-spacing': [2, 'never'],
+    "attribute-order": 0
+    // 取消指定的规则
   }
 }
