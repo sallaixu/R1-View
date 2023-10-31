@@ -59,6 +59,22 @@ div:focus {
   }
 }
 
+/* 自定义滚动条的宽度和圆角 */
+::-webkit-scrollbar {
+  width: 8px; /* 设置滚动条的宽度 */
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px; /* 水平滚动条高度 */
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background: #82a6cc; /* 滑块颜色 */
+  border-radius: 4px; /* 滑块圆角 */
+}
+
+
 // main-container global css
 .app-container {
   padding: 20px;
